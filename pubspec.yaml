@@ -1,7 +1,7 @@
 name: extendable_dropdown
-description: "A new Flutter package project."
+description: "A new Flutter package for multiple dropdown handling."
 version: 0.0.1
-homepage:
+homepage: https://github.com/ChanukaUOJ/extendable_dropdown
 
 environment:
   sdk: '>=3.3.0 <4.0.0'

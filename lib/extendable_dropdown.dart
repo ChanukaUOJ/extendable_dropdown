@@ -1,3 +1,3 @@
 library extendable_dropdown;
 
-export './extendable_dropdown.dart';
+export './src/extendable_dropdown.dart';
