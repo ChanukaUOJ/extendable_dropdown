@@ -1,6 +1,7 @@
 name: extendable_dropdown
-description: "ExtendableDropdown is a versatile Flutter package for dynamic, customizable dropdown menus. It supports expandable lists, dismissible items for easy removal, and extensive customization options for colors, icons, and borders."
-version: 1.0.0
+description: "ExtendableDropdown is a versatile Flutter package for dynamic, customizable dropdown menus"
+version: 1.0.2
+
 homepage: https://github.com/ChanukaUOJ/extendable_dropdown
 
 environment:
