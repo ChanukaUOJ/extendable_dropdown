@@ -1,6 +1,10 @@
 # extendable_dropdown
 
+<<<<<<< Updated upstream
 # ExtendableDropdown - A Flutter Package for Flexible Dropdowns (v0.1.0)
+=======
+## ExtendableDropdown - A Flutter Package for Flexible Dropdowns (v1.0.2)
+>>>>>>> Stashed changes
 
 Introducing **ExtendableDropdown**, a customizable Flutter package that empowers you to create dynamic and expandable multiple dropdown menus in your applications.
 
@@ -25,7 +29,11 @@ Add `extendable_dropdown` as a dependency in your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
+<<<<<<< Updated upstream
   extendable_dropdown: ^0.1.0
+=======
+  extendable_dropdown: ^1.0.2
+>>>>>>> Stashed changes
 ```
 
 Import
