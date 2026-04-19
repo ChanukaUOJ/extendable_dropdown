@@ -1,14 +1,15 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=C:\MyFlutter\flutter
-FLUTTER_APPLICATION_PATH=E:\working_on_GitHub\mypackage_testing
+FLUTTER_ROOT=/Users/mymac/develop/flutter
+FLUTTER_APPLICATION_PATH=/Users/mymac/Documents/MyProjects/extendable_dropdown/example
 COCOAPODS_PARALLEL_CODE_SIGN=true
-FLUTTER_TARGET=lib\main.dart
+FLUTTER_TARGET=/Users/mymac/Documents/MyProjects/extendable_dropdown/example/lib/main.dart
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
 EXCLUDED_ARCHS[sdk=iphonesimulator*]=i386
 EXCLUDED_ARCHS[sdk=iphoneos*]=armv7
+DART_DEFINES=RkxVVFRFUl9WRVJTSU9OPTMuMzguNw==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049M2I2MmVmYzJhMw==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049NzhmYzMwMTJlNA==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My4xMC43
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=.dart_tool/package_config.json
+PACKAGE_CONFIG=/Users/mymac/Documents/MyProjects/extendable_dropdown/example/.dart_tool/package_config.json

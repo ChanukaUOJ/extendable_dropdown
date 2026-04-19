@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 ///
 /// Example:
 /// ```dart
-/// void _handleSendListChanged(List<dynamic> sendList) {
+/// void _handleSendListChanged(List<String> sendList) {
 ///   setState(() {
 ///     _selectedItems = sendList;
 ///   });
@@ -22,310 +22,322 @@ import 'package:flutter/material.dart';
 /// See also:
 /// * [ExtendableDropdown.onSendListChanged]
 
-typedef SendListCallback = void Function(List<dynamic> sendList);
+typedef SendListCallback<T> = void Function(List<T> sendList);
 
 /// A customizable dropdown widget that supports multiple selections and expandable options.
 ///
 /// The `ExtendableDropdown` widget allows users to create dynamic and expandable dropdown menus
 /// with customizable appearance and behavior. It supports adding and removing dropdown options,
 /// and provides flexibility in configuring its appearance and interaction.
-// ignore: must_be_immutable
-class ExtendableDropdown extends StatefulWidget {
+class ExtendableDropdown<T> extends StatefulWidget {
   /// The background color of the dismissible icon (e.g., delete button) in the dropdown list.
-  Color dismissibleBackgroundColor = Colors.red;
+  final Color dismissibleBackgroundColor;
 
   /// The icon widget displayed for dismissible actions (e.g., delete button) in the dropdown list.
-  Widget dismissibleIcon = const Icon(Icons.delete_outline_rounded);
+  final Widget dismissibleIcon;
 
   /// The icon displayed when an item is selected in the dropdown.
-  IconData? selectedIcon = Icons.radio_button_checked_rounded;
+  final IconData? selectedIcon;
 
   /// The color of the icon displayed when an item is selected.
-  Color? selectedIconColor = Colors.green;
+  final Color? selectedIconColor;
 
   /// The icon displayed when an item is not selected in the dropdown.
-  IconData? nonSelectedIcon = Icons.location_on_outlined;
+  final IconData? nonSelectedIcon;
 
   /// The color of the icon displayed when an item is not selected.
-  Color? nonSelectedIconColor = Colors.red;
+  final Color? nonSelectedIconColor;
 
   /// The icon displayed in the dropdown list.
-  IconData? listIcon = Icons.location_on_outlined;
+  final IconData? listIcon;
 
   /// The color of the icon displayed in the dropdown list.
-  Color? listIconColor = Colors.red;
+  final Color? listIconColor;
 
   /// The list of items to display in the dropdown.
-  List<dynamic> list = [];
+  final List<T> list;
+
+  /// A function that returns a string representation of the item.
+  ///
+  /// This is used to display the item in the dropdown and selection list.
+  /// If not provided, `item.toString()` will be used.
+  final String Function(T item)? labelBuilder;
 
   /// A callback function that is called when the selected list changes.
   ///
   /// This function is called with the updated list of selected items.
-  final SendListCallback onSendListChanged;
+  final SendListCallback<T> onSendListChanged;
 
   /// The padding applied to the top of the dropdown.
-  double paddingTop = 16.0;
+  final double paddingTop;
 
   /// The padding applied to the bottom of the dropdown.
-  double paddingBottom = 16.0;
+  final double paddingBottom;
 
   /// The padding applied to the left of the dropdown.
-  double paddingLeft = 16.0;
+  final double paddingLeft;
 
   /// The padding applied to the right of the dropdown.
-  double paddingRight = 16.0;
+  final double paddingRight;
 
   /// The background color of the snackbar that appears for certain actions.
-  Color? snackBarcolor = const Color.fromARGB(255, 142, 142, 158);
+  final Color? snackBarcolor;
 
   /// The border radius of the snackbar
-  double snakBarBorderRadius = 15.0;
+  final double snakBarBorderRadius;
 
   /// The margin around the snackbar.
-  double snackBarMargin = 10.0;
+  final double snackBarMargin;
 
   /// The text color of the snackbar.
-  Color? snackBarTextcolor = Colors.white;
+  final Color? snackBarTextcolor;
 
   /// The border radius of the dropdown's container.
-  double dropdownBorderRadius = 10.0;
+  final double dropdownBorderRadius;
+
+  /// A custom widget to display as the "Add New Dropdown" button.
+  ///
+  /// If provided, this widget will be used for the button's appearance,
+  /// while the package handles the logical integration (adding a new slot).
+  final Widget? addButton;
+
+  /// A callback to handle when a message needs to be shown.
+  ///
+  /// This allows users to use their own notification system or custom SnackBar.
+  /// If not provided, a default SnackBar will be shown.
+  final void Function(BuildContext context, String message)? onMessage;
 
   /// Creates an instance of `ExtendableDropdown`.
   ///
-  /// Requires [list] and [onSendListChanged] to be provided. Other parameters are optional
-  /// and can be customized to fit the design requirements.
-  ExtendableDropdown({
+  /// {@tool snippet}
+  ///
+  /// ```dart
+  /// ExtendableDropdown<String>(
+  ///   list: ['Option 1', 'Option 2'],
+  ///   onSendListChanged: (selectedItems) => print(selectedItems),
+  /// )
+  /// ```
+  /// {@end-tool}
+  const ExtendableDropdown({
     super.key,
-    required this.dismissibleBackgroundColor,
-    required this.dismissibleIcon,
-    this.selectedIcon,
-    this.selectedIconColor,
-    this.nonSelectedIcon,
-    this.nonSelectedIconColor,
-    this.listIcon,
-    this.listIconColor,
     required this.list,
     required this.onSendListChanged,
-    required this.paddingTop,
-    required this.paddingBottom,
-    required this.paddingLeft,
-    required this.paddingRight,
+    this.dismissibleBackgroundColor = Colors.red,
+    this.dismissibleIcon = const Icon(Icons.delete_outline_rounded),
+    this.selectedIcon = Icons.radio_button_checked_rounded,
+    this.selectedIconColor = Colors.green,
+    this.nonSelectedIcon = Icons.location_on_outlined,
+    this.nonSelectedIconColor = Colors.red,
+    this.listIcon = Icons.location_on_outlined,
+    this.listIconColor = Colors.red,
+    this.labelBuilder,
+    this.paddingTop = 16.0,
+    this.paddingBottom = 16.0,
+    this.paddingLeft = 16.0,
+    this.paddingRight = 16.0,
     this.snackBarcolor,
-    required this.snakBarBorderRadius,
-    required this.snackBarMargin,
+    this.snakBarBorderRadius = 15.0,
+    this.snackBarMargin = 10.0,
     this.snackBarTextcolor,
-    required this.dropdownBorderRadius,
+    this.dropdownBorderRadius = 10.0,
+    this.addButton,
+    this.onMessage,
   });
 
   @override
-  State<ExtendableDropdown> createState() => _ExtendableDropdownState();
+  State<ExtendableDropdown<T>> createState() => _ExtendableDropdownState<T>();
 }
 
-class _ExtendableDropdownState extends State<ExtendableDropdown> {
-  int dropDownCount = 1;
+class _ExtendableDropdownState<T> extends State<ExtendableDropdown<T>> {
+  /// The list of items currently available for selection.
+  late List<T> _availableItems;
 
-  late List<bool> isClicked = List.filled(widget.list.length, false);
-  late List<dynamic> sendList = [];
+  /// The list of currently selected items (or null for empty slots).
+  late List<T?> _selections;
 
-  void _updateSendList() {
-    widget.onSendListChanged(
-        sendList); // Trigger the callback with the updated list
+  @override
+  void initState() {
+    super.initState();
+    _availableItems = List.from(widget.list);
+    _selections = [null];
+  }
+
+  @override
+  void didUpdateWidget(covariant ExtendableDropdown<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.list != oldWidget.list) {
+      setState(() {
+        // Sync available items while preserving selections if they still exist in the new list.
+        _availableItems = List.from(widget.list);
+        for (var i = 0; i < _selections.length; i++) {
+          final selection = _selections[i];
+          if (selection != null) {
+            if (widget.list.contains(selection)) {
+              _availableItems.remove(selection);
+            } else {
+              _selections[i] = null;
+            }
+          }
+        }
+        _updateParent();
+      });
+    }
+  }
+
+  /// Returns the label for a given item.
+  String _getItemLabel(T item) {
+    if (widget.labelBuilder != null) {
+      return widget.labelBuilder!(item);
+    }
+    return item.toString();
+  }
+
+  /// Triggers the callback with the current list of non-null selections.
+  void _updateParent() {
+    final selected = _selections.whereType<T>().toList();
+    widget.onSendListChanged(selected);
+  }
+
+  /// Adds a new empty dropdown slot if criteria are met.
+  void _addNewSlot() {
+    if (_availableItems.isEmpty) {
+      _showMessage(context, 'No more items available!');
+      return;
+    }
+    if (_selections.any((element) => element == null)) {
+      _showMessage(context, 'Fill the existing slots first!');
+      return;
+    }
+    setState(() {
+      _selections.add(null);
+    });
+  }
+
+  /// Removes a dropdown slot at the given index.
+  void _removeSlot(int index) {
+    if (_selections.length <= 1) {
+      _showMessage(context, "At least one dropdown must remain.");
+      return;
+    }
+
+    setState(() {
+      final removedItem = _selections[index];
+      if (removedItem != null) {
+        _availableItems.add(removedItem);
+      }
+      _selections.removeAt(index);
+      _updateParent();
+    });
+  }
+
+  /// Handles selection changes for a specific slot.
+  void _onChanged(int index, T? newValue) {
+    if (newValue == null) return;
+
+    setState(() {
+      final oldValue = _selections[index];
+      if (oldValue != null) {
+        _availableItems.add(oldValue);
+      }
+      _selections[index] = newValue;
+      _availableItems.remove(newValue);
+      _updateParent();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+
     return Padding(
       padding: EdgeInsets.only(
-          top: widget.paddingTop,
-          bottom: widget.paddingBottom,
-          left: widget.paddingLeft,
-          right: widget.paddingRight),
+        top: widget.paddingTop,
+        bottom: widget.paddingBottom,
+        left: widget.paddingLeft,
+        right: widget.paddingRight,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ListView.builder(
+          ListView.separated(
             shrinkWrap: true,
-            itemCount: dropDownCount,
+            itemCount: _selections.length,
             physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: ((context, index) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Dismissible(
-                    key: UniqueKey(),
-                    direction: DismissDirection.endToStart,
-                    background: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 15),
-                      decoration: BoxDecoration(
-                        color: widget.dismissibleBackgroundColor,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(5),
-                        ),
-                      ),
-                      child: widget.dismissibleIcon,
-                    ),
-                    onDismissed: (DismissDirection direction) {
-                      setState(() {
-                        if (dropDownCount == 1) {
-                          showMessage(context, "You can't remove this...");
-                          return;
-                        }
-                        dropDownCount--;
-                        isClicked[index] = false;
-                        bool swapped;
-                        for (int i = 0; i < isClicked.length - 1; i++) {
-                          swapped = false;
-                          for (int j = 0; j < isClicked.length - i - 1; j++) {
-                            if (isClicked[j] == false &&
-                                isClicked[j + 1] == true) {
-                              bool temp = isClicked[j];
-                              isClicked[j] = isClicked[j + 1];
-                              isClicked[j + 1] = temp;
-                              swapped = true;
-                            }
-                          }
-                          if (!swapped) {
-                            break;
-                          }
-                        }
-                        widget.list.add(sendList[index]);
-                        sendList.removeAt(index);
-                        // dropdownShowing.removeAt(index);
-                        _updateSendList();
-                      });
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        if (isClicked[index] == true)
-                          widget.selectedIcon != null
-                              ? Icon(
-                                  widget.selectedIcon,
-                                  color: widget.selectedIconColor,
-                                )
-                              : const SizedBox(),
-                        if (isClicked[index] == false)
-                          widget.nonSelectedIcon != null
-                              ? Icon(
-                                  widget.nonSelectedIcon,
-                                  color: widget.nonSelectedIconColor,
-                                )
-                              : const SizedBox(),
-                        widget.selectedIcon != null ||
-                                widget.nonSelectedIcon != null
-                            ? const SizedBox(
-                                width: 10,
-                              )
-                            : const SizedBox(),
-                        Expanded(
-                          child: Container(
-                            width: screenSize.width,
-                            height: screenSize.width * 0.125,
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: Colors.black45, width: 1.5),
-                              borderRadius: BorderRadius.circular(
-                                  widget.dropdownBorderRadius),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<dynamic>(
-                                  hint: Text(
-                                    isClicked[index] == true
-                                        ? sendList[index]
-                                        : "Select an item",
-                                    style:
-                                        const TextStyle(color: Colors.black87),
-                                  ),
-                                  onChanged: (dynamic selectedValue) {
-                                    setState(() {
-                                      if (selectedValue != null) {
-                                        if (isClicked[index] == true) {
-                                          widget.list.remove(selectedValue);
-                                          widget.list.add(sendList[index]);
-                                          sendList[index] = selectedValue;
-                                          // dropdownShowing[index] =
-                                          //     selectedValue;
-                                        } else if (isClicked[index] == false) {
-                                          isClicked[index] = true;
-                                          sendList.add(selectedValue);
-                                          widget.list.remove(selectedValue);
-                                        }
-
-                                        _updateSendList();
-                                      }
-                                    });
-                                  },
-                                  items: widget.list
-                                      .map<DropdownMenuItem<dynamic>>(
-                                          (dynamic item) {
-                                    return DropdownMenuItem<dynamic>(
-                                      value: item,
-                                      child: Row(
-                                        children: [
-                                          widget.listIcon != null
-                                              ? Icon(
-                                                  widget.listIcon,
-                                                  color: widget.listIconColor ??
-                                                      Colors.black,
-                                                )
-                                              : const SizedBox(),
-                                          SizedBox(
-                                              width: screenSize.width * 0.01),
-                                          Text(
-                                            item,
-                                            style: const TextStyle(
-                                                color: Colors.black87),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                ],
-              );
-            }),
-          ),
-          const SizedBox(
-            height: 15,
-          ),
-          InkWell(
-            focusColor: Colors.red,
-            onTap: () {
-              if (widget.list.isEmpty) {
-                showMessage(context, 'No item to select');
-              } else if (sendList.length + 1 == dropDownCount) {
-                showMessage(context, 'Fill the previous dropdown');
-              } else if (sendList.isNotEmpty) {
-                setState(() {
-                  dropDownCount++;
-                });
-              } else if (sendList.length < dropDownCount) {
-                showMessage(context, 'Choose an item!');
-              } else if (widget.list.length == dropDownCount - 1) {
-                showMessage(context, "No more items available!");
-              }
+            separatorBuilder: (context, index) => const SizedBox(height: 12),
+            itemBuilder: (context, index) {
+              return _buildDropdownSlot(index, theme);
             },
-            child: const Row(
-              children: [
-                Icon(Icons.add_circle_outline_rounded),
-                SizedBox(
-                  width: 5,
+          ),
+          const SizedBox(height: 16),
+          _buildAddButton(theme),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDropdownSlot(int index, ThemeData theme) {
+    final selection = _selections[index];
+    final isSelected = selection != null;
+
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      onDismissed: (_) => _removeSlot(index),
+      background: Container(
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+          color: widget.dismissibleBackgroundColor,
+          borderRadius: BorderRadius.circular(widget.dropdownBorderRadius),
+        ),
+        child: widget.dismissibleIcon,
+      ),
+      child: Row(
+        children: [
+          _buildLeadingIcon(isSelected),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: isSelected ? theme.primaryColor : theme.dividerColor,
+                  width: isSelected ? 2 : 1.5,
                 ),
-                Text('Add New Dropdown'),
-              ],
+                borderRadius: BorderRadius.circular(widget.dropdownBorderRadius),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<T>(
+                  isExpanded: true,
+                  hint: Text(
+                    isSelected ? _getItemLabel(selection!) : "Select an item",
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: isSelected ? theme.textTheme.bodyLarge?.color : theme.hintColor,
+                    ),
+                  ),
+                  items: _availableItems.map((item) {
+                    return DropdownMenuItem<T>(
+                      value: item,
+                      child: Row(
+                        children: [
+                          if (widget.listIcon != null) ...[
+                            Icon(
+                              widget.listIcon,
+                              size: 18,
+                              color: widget.listIconColor ?? theme.iconTheme.color,
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                          Text(_getItemLabel(item)),
+                        ],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) => _onChanged(index, value),
+                ),
+              ),
             ),
           ),
         ],
@@ -333,28 +345,70 @@ class _ExtendableDropdownState extends State<ExtendableDropdown> {
     );
   }
 
-  void showMessage(BuildContext context, String message) {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    scaffoldMessenger.showSnackBar(
+  Widget _buildLeadingIcon(bool isSelected) {
+    final iconData = isSelected ? widget.selectedIcon : widget.nonSelectedIcon;
+    final color = isSelected ? widget.selectedIconColor : widget.nonSelectedIconColor;
+
+    if (iconData == null) return const SizedBox.shrink();
+
+    return Icon(
+      iconData,
+      color: color,
+    );
+  }
+
+  Widget _buildAddButton(ThemeData theme) {
+    final defaultButton = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.add_circle_outline_rounded,
+            color: theme.primaryColor,
+            size: 20,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'Add New Dropdown',
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: theme.primaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return InkWell(
+      onTap: _addNewSlot,
+      borderRadius: BorderRadius.circular(8),
+      child: widget.addButton ?? defaultButton,
+    );
+  }
+
+  void _showMessage(BuildContext context, String message) {
+    if (widget.onMessage != null) {
+      widget.onMessage!(context, message);
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           message,
           style: TextStyle(
-            color: widget.snackBarTextcolor,
+            color: widget.snackBarTextcolor ?? Colors.white,
             fontSize: 14.0,
           ),
         ),
-        backgroundColor: widget.snackBarcolor,
+        backgroundColor: widget.snackBarcolor ?? Theme.of(context).snackBarTheme.backgroundColor ?? Colors.grey[800],
         behavior: SnackBarBehavior.floating,
-        duration: const Duration(seconds: 3),
+        duration: const Duration(seconds: 2),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(widget.snakBarBorderRadius),
         ),
         margin: EdgeInsets.all(widget.snackBarMargin),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20.0,
-          vertical: 10.0,
-        ),
       ),
     );
   }
