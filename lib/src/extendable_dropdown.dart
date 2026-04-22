@@ -306,15 +306,18 @@ class _ExtendableDropdownState<T> extends State<ExtendableDropdown<T>> {
                   color: isSelected ? theme.primaryColor : theme.dividerColor,
                   width: isSelected ? 2 : 1.5,
                 ),
-                borderRadius: BorderRadius.circular(widget.dropdownBorderRadius),
+                borderRadius:
+                    BorderRadius.circular(widget.dropdownBorderRadius),
               ),
               child: DropdownButtonHideUnderline(
                 child: DropdownButton<T>(
                   isExpanded: true,
                   hint: Text(
-                    isSelected ? _getItemLabel(selection!) : "Select an item",
+                    isSelected ? _getItemLabel(selection) : "Select an item",
                     style: theme.textTheme.bodyMedium?.copyWith(
-                      color: isSelected ? theme.textTheme.bodyLarge?.color : theme.hintColor,
+                      color: isSelected
+                          ? theme.textTheme.bodyLarge?.color
+                          : theme.hintColor,
                     ),
                   ),
                   items: _availableItems.map((item) {
@@ -326,7 +329,8 @@ class _ExtendableDropdownState<T> extends State<ExtendableDropdown<T>> {
                             Icon(
                               widget.listIcon,
                               size: 18,
-                              color: widget.listIconColor ?? theme.iconTheme.color,
+                              color:
+                                  widget.listIconColor ?? theme.iconTheme.color,
                             ),
                             const SizedBox(width: 8),
                           ],
@@ -347,7 +351,8 @@ class _ExtendableDropdownState<T> extends State<ExtendableDropdown<T>> {
 
   Widget _buildLeadingIcon(bool isSelected) {
     final iconData = isSelected ? widget.selectedIcon : widget.nonSelectedIcon;
-    final color = isSelected ? widget.selectedIconColor : widget.nonSelectedIconColor;
+    final color =
+        isSelected ? widget.selectedIconColor : widget.nonSelectedIconColor;
 
     if (iconData == null) return const SizedBox.shrink();
 
@@ -402,7 +407,9 @@ class _ExtendableDropdownState<T> extends State<ExtendableDropdown<T>> {
             fontSize: 14.0,
           ),
         ),
-        backgroundColor: widget.snackBarcolor ?? Theme.of(context).snackBarTheme.backgroundColor ?? Colors.grey[800],
+        backgroundColor: widget.snackBarcolor ??
+            Theme.of(context).snackBarTheme.backgroundColor ??
+            Colors.grey[800],
         behavior: SnackBarBehavior.floating,
         duration: const Duration(seconds: 2),
         shape: RoundedRectangleBorder(
