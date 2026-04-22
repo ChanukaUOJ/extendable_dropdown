@@ -15,3 +15,8 @@
 
 *Change the package description length
 
+## 1.0.4
+
+*Add more customizable parameters.
+*Update the example project
+*Made the package generic
