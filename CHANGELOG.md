@@ -15,7 +15,7 @@
 
 *Change the package description length
 
-## 1.0.4
+## 2.0.0
 
 *Add more customizable parameters.
 *Update the example project
